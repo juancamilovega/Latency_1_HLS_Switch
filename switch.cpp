@@ -621,7 +621,7 @@ void arbitration_function(
 
 
 
-void AXIS_switch_Lat1
+void AXIS_switch
 (
 	//Include the input ports
     ap_uint<1> &in_port_0_ready,
