@@ -145,7 +145,7 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 		while (Current_Port < NUMBER_OF_OUT_PORTS):
 			print "Enter the dest for port number %d\n" %(Current_Port)
 			DEST_NUMBER=raw_input().strip()
-			while ((int(DEST_NUMBER)).bitlength()>(int(DEST_IN_DATA)+int(INCLUDE_DEST)):
+			while ((int(DEST_NUMBER)).bit_length()>(int(DEST_IN_DATA)+int(INCLUDE_DEST))):
 				print "Invalid DEST does not fit in dest bits. Try again\n"
 				DEST_NUMBER=raw_input().strip()
 			header.write("\n#define out_port_%d_dest_address " %(Current_Port))
