@@ -1,5 +1,5 @@
 open_project switch_Lat1
-set_top AXIS_switch_Lat1
+set_top AXIS_switch
 set infile [open "Namefile.txt" r]
 set name_append [gets $infile]
 close $infile
