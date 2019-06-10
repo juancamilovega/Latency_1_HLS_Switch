@@ -11,12 +11,14 @@ header.write("#include \"ap_int.h\"\n\n")
 arbitration_strategy = "Garbage"
 fixed_length_writes = 0
 while (arbitration_strategy != "PRIORITY") and (arbitration_strategy != "ROUNDROBIN"):
-	print "Which Arbitration strategy do you want to use (ROUNDROBIN(1) or PRIORITY(0))\n"
+	print "Which Arbitration strategy do you want to use (ROUNDROBIN(1) or PRIORITY(0) or HELP(2))\n"
 	arbitration_strategy=raw_input().strip().upper()
 	if (arbitration_strategy=="0"):
 		arbitration_strategy = "PRIORITY"
 	elif (arbitration_strategy=="1"):
 		arbitration_strategy = "ROUNDROBIN"
+	elif (arbitration_strategy=="HELP" or arbitration_strategy=="2"):
+		print "In PRIORITY arbitration, the packets coming in from lower port numbers will be serviced first (in port 0 has greatest priority)\nIn ROUNDROBIN arbitration, the priority of the ports is rotated each cycle allowing for more fair arbitration.\nNOTE:PRIORITY arbitration has better performance and will allow a higher frequency clock than ROUNDROBIN"
 if arbitration_strategy == "ROUNDROBIN":
 	fixed_length_writes+=1
 header.write("#define ")
@@ -25,12 +27,14 @@ header.write("_ARBITRATION\n#define NUMBER_OF_IN_PORTS %d" %(input_ports))
 
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is the dest information located in the data (YES(1) or NO(0))\n"
+	print "Is the dest information located in the data (YES(1) or NO(0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="2" or text_input=="HELP"):
+		print "Dest info in data specifies that the first n bits of each payload carry the dest information used for routing. In multi flit packets, dest information is collected from the first flit of the packet\n"
 if text_input == "YES":
 	print "Enter the number of bits of your dest\n"
 	DEST_IN_DATA=raw_input().strip().upper()
@@ -40,12 +44,14 @@ else:
 	text_input="garbage"
 	DEST_IN_DATA = "0"
 	while (text_input != "NO") and (text_input != "YES"):
-		print "Is there a sideband DEST channel? (YES(1) or NO(0))\n"
+		print "Is there a sideband DEST channel? (YES(1) or NO(0) or HELP(2))\n"
 		text_input=raw_input().strip().upper()
 		if (text_input=="0"):
 			text_input="NO"
 		elif (text_input=="1"):
 			text_input="YES"
+		elif (text_input=="HELP" or text_input=="2"):
+			print "A sideband dest channel would be added of the specified bit width, if output parsing is enabled, this is used for routing."
 	if text_input=="YES":
 		print "Enter the number of bits of your dest\n"
 		INCLUDE_DEST=raw_input().strip().upper()
@@ -58,12 +64,14 @@ header.write("\n#define DEST_IN_DATA ")
 header.write(DEST_IN_DATA)
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is there a sideband STRB channel (YES(1) or NO (0))\n"
+	print "Is there a sideband STRB channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="HELP" or text_input=="2"):
+		print "If selected a sideband STRB port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your strb\n"
 	INCLUDE_STRB=raw_input().strip().upper()
@@ -74,12 +82,14 @@ header.write(INCLUDE_STRB)
 name.write(INCLUDE_STRB+"_")
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is there a sideband ID channel (YES(1) or NO (0))\n"
+	print "Is there a sideband ID channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="HELP" or text_input=="2"):
+		print "If selected a sideband ID port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your id\n"
 	INCLUDE_ID=raw_input().strip().upper()
@@ -90,12 +100,14 @@ header.write(INCLUDE_ID)
 name.write(INCLUDE_ID+"_")
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is there a sideband KEEP channel (YES(1) or NO (0))\n"
+	print "Is there a sideband KEEP channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="HELP" or text_input=="2"):
+		print "If selected a sideband KEEP port will be added that will be 1/8 the side of the data width"
 if text_input == "YES":
 	INCLUDE_KEEP="1"
 	fixed_length_writes+=2
@@ -105,12 +117,14 @@ header.write("\n#define INCLUDE_KEEP ")
 header.write(INCLUDE_KEEP)
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is there a sideband USER channel (YES(1) or NO (0))\n"
+	print "Is there a sideband USER channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="HELP" or text_input=="2"):
+		print "If selected a sideband USER port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your user\n"
 	INCLUDE_USER=raw_input().strip().upper()
@@ -121,12 +135,14 @@ header.write(INCLUDE_USER)
 name.write(INCLUDE_USER+"_")
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
-	print "Is there a sideband LAST channel (YES(1) or NO (0))\n"
+	print "Is there a sideband LAST channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
 	if (text_input=="0"):
 		text_input="NO"
 	elif (text_input=="1"):
 		text_input="YES"
+	elif (text_input=="HELP" or text_input=="2"):
+		print "If selected a sideband LAST port will be added, if added it is used to specify the end of a packet. Arbitration is only done after a packet has fully passed."
 if text_input == "YES":
 	INCLUDE_LAST="1"
 	fixed_length_writes += 4
@@ -147,23 +163,27 @@ name.write(INCLUDE_LAST+"_")
 if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 	text_input="Garbage"
 	while (text_input != "NO") and (text_input != "YES"):
-		print "Is output parsing required (YES(1) or NO (0))\n"
+		print "Is output parsing required (YES(1) or NO (0) or HELP(2))\n"
 		text_input=raw_input().strip().upper()
 		if (text_input=="0"):
 			text_input="NO"
 		elif (text_input=="1"):
 			text_input="YES"
+		elif (text_input=="HELP" or text_input=="2"):
+			print "Output parsing allows for multiple output ports from the AXIS switch. If enabled, the dest information is used to specify where each packet should go"
 	if text_input == "YES":
 		header.write("\n#define OUTPUT_PARSING_ENABLE 1")
 		fixed_length_writes+=8
 		text_input="Garbage"
 		while (text_input != "NO") and (text_input != "YES"):
-			print "Is masking enabled (YES(1) or NO (0))?\n"
+			print "Is masking enabled (YES(1) or NO (0) or HELP(2))?\n"
 			text_input=raw_input().strip().upper()
 			if (text_input=="0"):
 				text_input="NO"
 			elif (text_input=="1"):
 				text_input="YES"
+			elif (text_input=="HELP" or text_input=="2"):
+				print "If selected the dest information will be masked by a specified value. This is useful if it is desired that a range of DEST values are sent on a particular port"
 		header.write("\n#define dest_mask ")
 		if (text_input=="YES"):
 			print "What is the mask?"
@@ -194,6 +214,8 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 			Current_Port=Current_Port+1
 	else:
 		header.write("\n#define OUTPUT_PARSING_ENABLE 0")
+else:
+	print "Since no dest source selected, Output parsing is disabled by default"
 name.write(str(fixed_length_writes))
 clock_file.write("10")
 clock_file.close()
