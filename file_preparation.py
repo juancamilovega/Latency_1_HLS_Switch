@@ -4,6 +4,9 @@ clock_file = open("ClockPeriod.txt","w+")
 header = open("switch.h","w+")
 name = open ("Namefile.txt","w+")
 input_ports= int(raw_input().strip())
+while ((input_ports<1) or (input_ports>16)):
+	print "Invalid number of input ports, must be positive value less than 16, try again"
+	input_ports = int(raw_input().strip())
 header.write("#include \"ap_int.h\"\n\n")
 arbitration_strategy = "Garbage"
 fixed_length_writes = 0
@@ -102,8 +105,10 @@ header.write(INCLUDE_LAST)
 print "What is the data width\n"
 DATA_WIDTH=raw_input().strip()
 while (int(DATA_WIDTH)%8!=0):
-	print "Invalid Data Width, must be a multiple of 8\n"
+	print "Invalid Data Width, must be a multiple of 8 and positive\n"
 	DATA_WIDTH=raw_input().strip()
+	if (int(DATA_WIDTH) < 0):
+		DATA_WIDTH="7"
 header.write("\n#define DATA_WIDTH ")
 header.write(DATA_WIDTH)
 name.write(INCLUDE_LAST+"_")
@@ -130,6 +135,9 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 			name.write("0_")
 		print "enter the number of output ports \n"
 		NUMBER_OF_OUT_PORTS = int(raw_input().strip())
+		while ((NUMBER_OF_OUT_PORTS<1) or (NUMBER_OF_OUT_PORTS>16)):
+			print "Invalid number of outports, must be positive value less than 16, try again"
+			NUMBER_OF_OUT_PORTS = int(raw_input().strip())
 		header.write("\n#define NUMBER_OF_OUT_PORTS ")
 		header.write(str(NUMBER_OF_OUT_PORTS))
 		fixed_length_writes=(NUMBER_OF_OUT_PORTS)*32
@@ -137,6 +145,9 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 		while (Current_Port < NUMBER_OF_OUT_PORTS):
 			print "Enter the dest for port number %d\n" %(Current_Port)
 			DEST_NUMBER=raw_input().strip()
+			while ((int(DEST_NUMBER)).bitlength()>(int(DEST_IN_DATA)+int(INCLUDE_DEST)):
+				print "Invalid DEST does not fit in dest bits. Try again\n"
+				DEST_NUMBER=raw_input().strip()
 			header.write("\n#define out_port_%d_dest_address " %(Current_Port))
 			header.write(DEST_NUMBER)
 			name.write(DEST_NUMBER+"_")
