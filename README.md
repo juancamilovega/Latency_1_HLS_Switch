@@ -11,3 +11,4 @@ The Latency 1 HLS switch provides AXI Stream Switch functionality allowing routi
           -Note, the project will be recursively generated 3 times where it learns based on the synthesis results to modify some internal parameters and generate a better solution
       
       If there are any questions during the questionare, type help when prompted
+- The project will be generated in the switch_Lat1 folder. The IP is the ip_file.zip file which can be imported to vivado
