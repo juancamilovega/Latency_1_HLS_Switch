@@ -24,6 +24,7 @@ if text_input == "yes":
 	print "Enter the number of bits of your dest\n"
 	DEST_IN_DATA=raw_input().strip()
 	INCLUDE_DEST="0"
+	fixed_length_writes+=16
 else:
 	text_input="garbage"
 	DEST_IN_DATA = "0"
@@ -35,7 +36,7 @@ else:
 		INCLUDE_DEST=raw_input().strip()
 	else:
 		INCLUDE_DEST="0"
-name.write(DEST_IN_DATA+"_"+INCLUDE_DEST+"_")
+name.write(str(int(DEST_IN_DATA)+int(INCLUDE_DEST))+"_")
 header.write("\n#define INCLUDE_DEST ")
 header.write(INCLUDE_DEST)
 header.write("\n#define DEST_IN_DATA ")
@@ -131,7 +132,7 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 		NUMBER_OF_OUT_PORTS = int(raw_input().strip())
 		header.write("\n#define NUMBER_OF_OUT_PORTS ")
 		header.write(str(NUMBER_OF_OUT_PORTS))
-		fixed_length_writes=(NUMBER_OF_OUT_PORTS)*16
+		fixed_length_writes=(NUMBER_OF_OUT_PORTS)*32
 		Current_Port = 0
 		while (Current_Port < NUMBER_OF_OUT_PORTS):
 			print "Enter the dest for port number %d\n" %(Current_Port)
