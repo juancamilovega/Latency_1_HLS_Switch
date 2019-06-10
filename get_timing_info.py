@@ -5,6 +5,6 @@ clock_file = open("ClockPeriod.txt","w+")
 for j in doc_root.findall("PerformanceEstimates"):
     for i in j.findall("SummaryOfTimingAnalysis"):
         clock_Period = float(i.find("EstimatedClockPeriod").text)
-        print("Current Estimated Clock period is " + str(clock_Period))
+        print("Current Estimated Clock period is " + str(clock_Period/0.865))
         clock_file.write(str(round(clock_Period/0.865,3)))
 clock_file.close()
