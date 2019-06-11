@@ -3,6 +3,7 @@ The Latency 1 HLS switch provides AXI Stream Switch functionality allowing routi
 
 # making the switch
 - clone the repository to a directory
+- In FPGAVersion.txt write the version number of the targeted fpga. By default it is the xczu19eg-ffvc1760-2-i fpga (sidewinder Ultrascale+ MPSOC).
 - run the command make
       
       This will run through a questionare allowing the user to specify the parameters of their AXIS line (data widths, sideband channels, ...) and of their switch implementation (arbitration method, dest location, ...)

@@ -3,6 +3,17 @@ print "\nFile Preparation Script:\n"
 clock_file = open("ClockPeriod.txt","w+")
 header = open("switch.h","w+")
 name = open ("Namefile.txt","w+")
+reset = open ("Resetfile.txt","w+")
+reset_type = "Garbage"
+while ((reset_type != "low") and (reset_type != "high")):
+	print "\nIs the core reset low or reset high (Low(0) or High(1))?"
+	reset_type=raw_input().strip().lower()
+	if (reset_type=="0"):
+		reset_type="low"
+	elif (reset_type=="1"):
+		reset_type="high"
+reset.write(reset_type)
+reset.close()
 print "\nEnter the number of input ports to configure\n"
 #Check for non-int input by catching errors in try except blocks, only accept good ints
 bad_input = True;
@@ -11,6 +22,8 @@ while (bad_input):
 		input_ports= int(raw_input().strip().lower(),0)
 		bad_input=False
 		break
+	except KeyboardInterrupt:
+		raise
 	except:
 		print "Value entered is not an integer, try again"
 		bad_input=True
@@ -23,6 +36,8 @@ while ((input_ports<1) or (input_ports>16)):
 			input_ports= int(raw_input().strip().lower(),0)
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -64,6 +79,8 @@ if text_input == "YES":
 			DEST_IN_DATA=str(int(raw_input().strip().lower(),0))
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -90,6 +107,8 @@ else:
 				INCLUDE_DEST=str(int(raw_input().strip().lower(),0))
 				bad_input=False
 				break
+			except KeyboardInterrupt:
+				raise
 			except:
 				print "Value entered is not an integer, try again"
 				bad_input=True
@@ -119,6 +138,8 @@ if text_input == "YES":
 			INCLUDE_STRB=str(int(raw_input().strip().lower(),0))
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -146,6 +167,8 @@ if text_input == "YES":
 			INCLUDE_ID=str(int(raw_input().strip().lower(),0))
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -191,6 +214,8 @@ if text_input == "YES":
 			INCLUDE_USER=str(int(raw_input().strip().lower(),0))
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -225,6 +250,8 @@ while (bad_input):
 		DATA_WIDTH=str(int(raw_input().strip().lower(),0))
 		bad_input=False
 		break
+	except KeyboardInterrupt:
+		raise
 	except:
 		print "Value entered is not an integer, try again"
 		bad_input=True
@@ -236,6 +263,8 @@ while (int(DATA_WIDTH,0)%8!=0):
 			DATA_WIDTH=str(int(raw_input().strip().lower(),0))
 			bad_input=False
 			break
+		except KeyboardInterrupt:
+			raise
 		except:
 			print "Value entered is not an integer, try again"
 			bad_input=True
@@ -279,6 +308,8 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 					mask_number=str(int(mask_number_str,0))
 					bad_input=False
 					break
+				except KeyboardInterrupt:
+					raise
 				except:
 					
 					print "Value entered is not an integer, try again"
@@ -295,6 +326,8 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 				NUMBER_OF_OUT_PORTS=int(raw_input().strip().lower(),0)
 				bad_input=False
 				break
+			except KeyboardInterrupt:
+				raise
 			except:
 				print "Value entered is not an integer, try again"
 				bad_input=True
@@ -313,6 +346,8 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 					DEST_NUMBER=str(int(raw_input().strip().lower(),0))
 					bad_input=False
 					break
+				except KeyboardInterrupt:
+					raise
 				except:
 					print "Value entered is not an integer, try again"
 					bad_input=True
@@ -324,6 +359,8 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 						DEST_NUMBER=str(int(raw_input().strip().lower(),0))
 						bad_input=False
 						break
+					except KeyboardInterrupt:
+						raise
 					except:
 						print "Value entered is not an integer, try again"
 						bad_input=True
@@ -338,6 +375,7 @@ else:
 name.write(str(fixed_length_writes))
 #always initialize clock file with 10, will be updated in future iterations to give tighter requirements
 clock_file.write("10")
+#close the files
 clock_file.close()
 header.close()
 name.close()
