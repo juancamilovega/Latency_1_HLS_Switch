@@ -45,3 +45,4 @@ clean:
 	rm -f Namefile.txt
 	rm -rf switch_Lat1
 	rm -f ip_file.zip
+	rm -f Resetfile.txt
