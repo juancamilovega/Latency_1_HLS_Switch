@@ -3,6 +3,17 @@ print "\nFile Preparation Script:\n"
 clock_file = open("ClockPeriod.txt","w+")
 header = open("switch.h","w+")
 name = open ("Namefile.txt","w+")
+reset = open ("Resetfile.txt","w+")
+reset_type = "Garbage"
+while ((reset_type != "low") and (reset_type != "high")):
+	print "\nIs the core reset low or reset high (Low(0) or High(1))?"
+	reset_type=raw_input().strip().lower()
+	if (reset_type=="0"):
+		reset_type="low"
+	elif (reset_type=="1"):
+		reset_type="high"
+reset.write(reset_type)
+reset.close()
 print "\nEnter the number of input ports to configure\n"
 #Check for non-int input by catching errors in try except blocks, only accept good ints
 bad_input = True;
