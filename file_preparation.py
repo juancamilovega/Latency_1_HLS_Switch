@@ -1,13 +1,34 @@
-print "File Preparation Python Script\n"
-print "Enter the number of input ports to configure\n"
+print "\nFile Preparation Script:\n"
+#Open the helper files
 clock_file = open("ClockPeriod.txt","w+")
 header = open("switch.h","w+")
 name = open ("Namefile.txt","w+")
-input_ports= int(raw_input().strip().upper())
+print "\nEnter the number of input ports to configure\n"
+#Check for non-int input by catching errors in try except blocks, only accept good ints
+bad_input = True;
+while (bad_input):
+	try:
+		input_ports= int(raw_input().strip().lower(),0)
+		bad_input=False
+		break
+	except:
+		print "Value entered is not an integer, try again"
+		bad_input=True
 while ((input_ports<1) or (input_ports>16)):
+	#retry until value in range and is an int
 	print "Invalid number of input ports, must be positive value less than 16, try again"
-	input_ports = int(raw_input().strip().upper())
+	bad_input=True
+	while (bad_input):
+		try:
+			input_ports= int(raw_input().strip().lower(),0)
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
+#add the include statements
 header.write("#include \"ap_int.h\"\n\n")
+#add arbitration strategy
 arbitration_strategy = "Garbage"
 fixed_length_writes = 0
 while (arbitration_strategy != "PRIORITY") and (arbitration_strategy != "ROUNDROBIN"):
@@ -24,7 +45,7 @@ if arbitration_strategy == "ROUNDROBIN":
 header.write("#define ")
 header.write(arbitration_strategy)
 header.write("_ARBITRATION\n#define NUMBER_OF_IN_PORTS %d" %(input_ports))
-
+#add DEST_IN_DATA and INCLUDE_DEST. Recall that one of the two must be zero
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is the dest information located in the data (YES(1) or NO(0) or HELP(2))\n"
@@ -37,7 +58,15 @@ while (text_input != "NO") and (text_input != "YES"):
 		print "Dest info in data specifies that the first n bits of each payload carry the dest information used for routing. In multi flit packets, dest information is collected from the first flit of the packet\n"
 if text_input == "YES":
 	print "Enter the number of bits of your dest\n"
-	DEST_IN_DATA=raw_input().strip().upper()
+	bad_input=True
+	while (bad_input):
+		try:
+			DEST_IN_DATA=str(int(raw_input().strip().lower(),0))
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
 	INCLUDE_DEST="0"
 	fixed_length_writes+=16
 else:
@@ -55,13 +84,23 @@ else:
 	if text_input=="YES":
 		print "Enter the number of bits of your dest\n"
 		INCLUDE_DEST=raw_input().strip().upper()
+		bad_input=True
+		while (bad_input):
+			try:
+				INCLUDE_DEST=str(int(raw_input().strip().lower(),0))
+				bad_input=False
+				break
+			except:
+				print "Value entered is not an integer, try again"
+				bad_input=True
 	else:
 		INCLUDE_DEST="0"
-name.write(str(int(DEST_IN_DATA)+int(INCLUDE_DEST))+"_")
+name.write(str(int(DEST_IN_DATA,0)+int(INCLUDE_DEST,0))+"_")
 header.write("\n#define INCLUDE_DEST ")
 header.write(INCLUDE_DEST)
 header.write("\n#define DEST_IN_DATA ")
 header.write(DEST_IN_DATA)
+#add STRB
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is there a sideband STRB channel (YES(1) or NO (0) or HELP(2))\n"
@@ -74,12 +113,21 @@ while (text_input != "NO") and (text_input != "YES"):
 		print "If selected a sideband STRB port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your strb\n"
-	INCLUDE_STRB=raw_input().strip().upper()
+	bad_input=True
+	while (bad_input):
+		try:
+			INCLUDE_STRB=str(int(raw_input().strip().lower(),0))
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
 else:
 	INCLUDE_STRB="0"
 header.write("\n#define INCLUDE_STRB ")
 header.write(INCLUDE_STRB)
 name.write(INCLUDE_STRB+"_")
+#add ID
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is there a sideband ID channel (YES(1) or NO (0) or HELP(2))\n"
@@ -92,13 +140,22 @@ while (text_input != "NO") and (text_input != "YES"):
 		print "If selected a sideband ID port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your id\n"
-	INCLUDE_ID=raw_input().strip().upper()
+	bad_input=True
+	while (bad_input):
+		try:
+			INCLUDE_ID=str(int(raw_input().strip().lower(),0))
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
 else:
 	INCLUDE_ID="0"
 header.write("\n#define INCLUDE_ID ")
 header.write(INCLUDE_ID)
 name.write(INCLUDE_ID+"_")
 text_input="Garbage"
+#add keep
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is there a sideband KEEP channel (YES(1) or NO (0) or HELP(2))\n"
 	text_input=raw_input().strip().upper()
@@ -115,6 +172,7 @@ else:
 	INCLUDE_KEEP="0"
 header.write("\n#define INCLUDE_KEEP ")
 header.write(INCLUDE_KEEP)
+#add USER
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is there a sideband USER channel (YES(1) or NO (0) or HELP(2))\n"
@@ -127,12 +185,21 @@ while (text_input != "NO") and (text_input != "YES"):
 		print "If selected a sideband USER port will be added of the specified width"
 if text_input == "YES":
 	print "Enter the number of bits of your user\n"
-	INCLUDE_USER=raw_input().strip().upper()
+	bad_input=True
+	while (bad_input):
+		try:
+			INCLUDE_USER=str(int(raw_input().strip().lower(),0))
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
 else:
 	INCLUDE_USER="0"
 header.write("\n#define INCLUDE_USER ")
 header.write(INCLUDE_USER)
 name.write(INCLUDE_USER+"_")
+#add LAST
 text_input="Garbage"
 while (text_input != "NO") and (text_input != "YES"):
 	print "Is there a sideband LAST channel (YES(1) or NO (0) or HELP(2))\n"
@@ -150,16 +217,34 @@ else:
 	INCLUDE_LAST="0"
 header.write("\n#define INCLUDE_LAST ")
 header.write(INCLUDE_LAST)
+#get the data width
 print "What is the data width\n"
-DATA_WIDTH=raw_input().strip().upper()
-while (int(DATA_WIDTH)%8!=0):
+bad_input=True
+while (bad_input):
+	try:
+		DATA_WIDTH=str(int(raw_input().strip().lower(),0))
+		bad_input=False
+		break
+	except:
+		print "Value entered is not an integer, try again"
+		bad_input=True
+while (int(DATA_WIDTH,0)%8!=0):
 	print "Invalid Data Width, must be a multiple of 8 and positive\n"
-	DATA_WIDTH=raw_input().strip().upper()
-	if (int(DATA_WIDTH) < 0):
+	bad_input=True
+	while (bad_input):
+		try:
+			DATA_WIDTH=str(int(raw_input().strip().lower(),0))
+			bad_input=False
+			break
+		except:
+			print "Value entered is not an integer, try again"
+			bad_input=True
+	if (int(DATA_WIDTH,0) < 0):
 		DATA_WIDTH="7"
 header.write("\n#define DATA_WIDTH ")
 header.write(DATA_WIDTH)
-name.write(INCLUDE_LAST+"_")
+name.write(DATA_WIDTH+"_")
+#section only needed if there is dest to parse
 if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 	text_input="Garbage"
 	while (text_input != "NO") and (text_input != "YES"):
@@ -187,27 +272,61 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 		header.write("\n#define dest_mask ")
 		if (text_input=="YES"):
 			print "What is the mask?"
-			mask_number = raw_input().strip().upper()
+			bad_input=True
+			while (bad_input):
+				mask_number_str = raw_input().strip().lower()
+				try:
+					mask_number=str(int(mask_number_str,0))
+					bad_input=False
+					break
+				except:
+					
+					print "Value entered is not an integer, try again"
+					bad_input=True
 			header.write(mask_number)
 			name.write(mask_number+"_")
 		else:
 			header.write("0")
 			name.write("0_")
 		print "enter the number of output ports \n"
-		NUMBER_OF_OUT_PORTS = int(raw_input().strip().upper())
+		bad_input=True
+		while (bad_input):
+			try:
+				NUMBER_OF_OUT_PORTS=int(raw_input().strip().lower(),0)
+				bad_input=False
+				break
+			except:
+				print "Value entered is not an integer, try again"
+				bad_input=True
 		while ((NUMBER_OF_OUT_PORTS<1) or (NUMBER_OF_OUT_PORTS>16)):
 			print "Invalid number of outports, must be positive value less than 16, try again"
-			NUMBER_OF_OUT_PORTS = int(raw_input().strip().upper())
+			NUMBER_OF_OUT_PORTS = int(raw_input().strip().upper(),0)
 		header.write("\n#define NUMBER_OF_OUT_PORTS ")
 		header.write(str(NUMBER_OF_OUT_PORTS))
 		fixed_length_writes=(NUMBER_OF_OUT_PORTS)*32
 		Current_Port = 0
 		while (Current_Port < NUMBER_OF_OUT_PORTS):
 			print "Enter the dest for port number %d\n" %(Current_Port)
-			DEST_NUMBER=raw_input().strip().upper()
-			while ((int(DEST_NUMBER)).bit_length()>(int(DEST_IN_DATA)+int(INCLUDE_DEST))):
+			bad_input=True
+			while (bad_input):
+				try:
+					DEST_NUMBER=str(int(raw_input().strip().lower(),0))
+					bad_input=False
+					break
+				except:
+					print "Value entered is not an integer, try again"
+					bad_input=True
+			while ((int(DEST_NUMBER,0)).bit_length()>(int(DEST_IN_DATA,0)+int(INCLUDE_DEST,0))):
 				print "Invalid DEST does NOt fit in dest bits. Try again\n"
-				DEST_NUMBER=raw_input().strip().upper()
+				bad_input=True
+				while (bad_input):
+					try:
+						DEST_NUMBER=str(int(raw_input().strip().lower(),0))
+						bad_input=False
+						break
+					except:
+						print "Value entered is not an integer, try again"
+						bad_input=True
 			header.write("\n#define out_port_%d_dest_address " %(Current_Port))
 			header.write(DEST_NUMBER)
 			name.write(DEST_NUMBER+"_")
@@ -217,6 +336,7 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 else:
 	print "Since no dest source selected, Output parsing is disabled by default"
 name.write(str(fixed_length_writes))
+#always initialize clock file with 10, will be updated in future iterations to give tighter requirements
 clock_file.write("10")
 clock_file.close()
 header.close()
