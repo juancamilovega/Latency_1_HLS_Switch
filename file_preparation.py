@@ -315,7 +315,7 @@ if (INCLUDE_DEST!="0") or (DEST_IN_DATA!="0"):
 					print "Value entered is not an integer, try again"
 					bad_input=True
 			header.write(mask_number)
-			name.write(mask_number+"_")
+			name.write(int(mask_number,0)+"_")
 		else:
 			header.write("0")
 			name.write("0_")
