@@ -756,10 +756,6 @@ void AXIS_switch
     AXIS_RAW &out_port,
     ap_uint<1> out_port_ready,
 #endif
-	ap_uint<1> &DEBUG_arbiter,
-	ap_uint<4> &DEBUG_roundrobin_stage,
-	ap_uint<5> &DEBUG_output_sw_reg,
-	AXIS_RAW &DEBUG_output_reg_last_valid,
     AXIS_RAW in_port_0
 )
 {
@@ -883,16 +879,12 @@ void AXIS_switch
 	//set up the variables
 #ifdef ROUNDROBIN_ARBITRATION
 	static ap_uint<4> roundrobin_stage = 0;
-	DEBUG_roundrobin_stage = roundrobin_stage;
 #endif
 	ap_uint<5> output_sw;//switch value this time
     static ap_uint<5> output_sw_reg = 0;//switch value last time
-    DEBUG_output_sw_reg=output_sw_reg;
     static AXIS_RAW output_reg = DUMMY;//register holding the previous input value
     static AXIS_RAW output_reg_last_valid = DUMMY;
-    DEBUG_output_reg_last_valid = output_reg_last_valid;
     static ap_uint<1> arbiter = 1;//indicates we should arbitrate this cycle
-    DEBUG_arbiter=arbiter;
     //Write previous input value to the output
 #if OUTPUT_PARSING_ENABLE == 1
     ap_uint<1> out_port_ready;
